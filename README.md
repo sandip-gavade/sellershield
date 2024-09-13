@@ -24,7 +24,7 @@ SellerShield is a Django-based web application designed to help Amazon sellers m
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/sellershield.git
+git clone https://github.com/sandip-gavade/sellershield.git
 cd sellershield
 
 2. Create and activate a virtual environment
