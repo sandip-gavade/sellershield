@@ -38,8 +38,8 @@ pip-delete-this-directory.txt
 docker-compose.override.yml
 docker-compose.override.yml
 .dockerignore
-docker-compose.yml
-Dockerfile
+# docker-compose.yml
+# Dockerfile
 
 # macOS files
 .DS_Store
