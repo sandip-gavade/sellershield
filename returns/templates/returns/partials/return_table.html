@@ -1,0 +1,55 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Return ID</th>
+            <th>Order ID</th>
+            <th>Reason</th>
+            <th>Tracking Number</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for return in page_obj %}
+        <tr>
+            <td>{{ return.return_id }}</td>
+            <td>{{ return.order.order_id }}</td>
+            <td>{{ return.get_return_reason_display }}</td>
+            <td>{{ return.return_tracking_number }}</td>
+            <td>{{ return.validation_status }}</td>
+            <td>
+                <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_return' return.id %}" hx-target="#dialog"
+                    hx-swap="outerHTML">Edit</button>
+                <button class="btn btn-warning btn-sm">Dispute</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No returns found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" hx-get="?page={{ page_obj.previous_page_number }}" hx-target="#content">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" hx-get="?page={{ num }}" hx-target="#content">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" hx-get="?page={{ page_obj.next_page_number }}" hx-target="#content">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

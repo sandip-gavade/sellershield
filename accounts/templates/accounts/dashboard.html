@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <h2>Dashboard</h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a hx-get="{% url 'list_orders' %}" hx-target="#content" hx-push-url="true">Orders</a>
+            </li>
+            <li class="list-group-item">
+                <a hx-get="{% url 'list_returns' %}" hx-target="#content" hx-push-url="true">Returns</a>
+            </li>
+            <li class="list-group-item">
+                <a hx-get="{% url 'list_disputes' %}" hx-target="#content" hx-push-url="true">Disputes</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div id="content">
+            <!-- HTMX will load the dynamic content here -->
+        </div>
+    </div>
+
+    <!-- Modal placeholder for create/edit -->
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const modal = new bootstrap.Modal(document.getElementById("modal"));
+
+        // Show the modal only for specific actions (like Create or Edit)
+        htmx.on("htmx:afterSwap", (e) => {
+            console.log("After swap event triggered", e.detail.target);
+            console.log("HTMX Event Details:", e.detail);
+
+            // Check if requestConfig and requestConfig.url exist before calling includes()
+            if (e.detail.requestConfig && e.detail.requestConfig.url &&
+                (e.detail.requestConfig.url.includes('create') || e.detail.requestConfig.url.includes('edit'))) {
+                console.log("INSIDE CREATE/EDIT MODAL");
+                modal.show();  // Trigger modal display
+            } else {
+                console.log("OUTSIDE CREATE/EDIT MODAL");
+            }
+        });
+
+
+        // Hide modal after successful form submission
+        htmx.on("htmx:beforeSwap", (e) => {
+            console.log("Before swap event triggered", e.detail.target);
+
+            // Ensure the modal is hidden only if the modal is the target and there is no response (e.g., form successfully submitted)
+            if (document.querySelector('#modal') && !e.detail.xhr.response) {
+                console.log("HIDING MODAL");
+                modal.hide();
+                e.detail.shouldSwap = false;
+            }
+        });
+
+
+    </script>
+
+</div>
+
+{% endblock %}

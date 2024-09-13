@@ -1,0 +1,81 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+
+# Environments
+env/
+venv/
+sellersh/
+ENV/
+env.bak/
+venv.bak/
+
+# If you are using a Python virtual environment:
+.venv/
+*.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django migrations
+*/migrations/*
+!*/migrations/__init__.py
+
+# Static and media files
+/static/
+/media/
+
+# Docker-related files
+docker-compose.override.yml
+docker-compose.override.yml
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+# macOS files
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Python packaging
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+develop-eggs/
+.installed.cfg
+*.egg-info/
+.Python
+*.manifest
+*.spec
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# MySQL dump files (if using)
+*.sql

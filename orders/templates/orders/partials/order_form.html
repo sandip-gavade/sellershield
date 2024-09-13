@@ -1,0 +1,14 @@
+<form hx-post="{% if order %}{% url 'edit_order' order.pk %}{% else %}{% url 'create_order' %}{% endif %}"
+    hx-target="this" class="modal-content">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">{{ order|default:"Create New" }} Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        {{ form.as_p }}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
