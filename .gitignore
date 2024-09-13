@@ -31,7 +31,7 @@ pip-delete-this-directory.txt
 !*/migrations/__init__.py
 
 # Static and media files
-/static/
+# /static/
 /media/
 
 # Docker-related files
