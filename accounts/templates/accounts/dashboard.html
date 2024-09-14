@@ -31,8 +31,84 @@
         </div>
     </div>
 
+    <!-- Modal placeholder for create/edit -->
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="modalContent">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container (Bootstrap 5) -->
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3">
+        <!-- Toast Template (hidden by default) -->
+        <div id="toast-template" class="toast align-items-center text-bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true" style="display: none;">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+        const modal = new bootstrap.Modal(document.getElementById("modal"));
+
+        // Show the modal after content is swapped into it
+        htmx.on("htmx:afterSwap", (e) => {
+            if (e.detail.target.classList.contains("modal-content")) {
+                modal.show();
+            }
+        });
+
+        // Handle success actions after form submission
+        htmx.on("htmx:afterRequest", (e) => {
+            if (e.detail.xhr.status === 200 && e.detail.target.classList.contains("modal-content")) {
+                modal.hide();
+                // Trigger refresh of order list if form submission is successful
+                // Ensure the order list element exists before triggering the refresh
+                // const orderList = document.querySelector("#orderList");
+                // if (orderList) {
+                //     console.log("Triggering orderList refresh");
+                //     htmx.trigger(orderList, "refresh");
+                // } else {
+                //     console.error("#orderList not found in the DOM");
+                // }
+                // Use hx-get to fetch and refresh the order list
+                htmx.ajax("GET", "/orders/", "#orderList", { swap: "innerHTML" });
+            }
+        });
+
+        // Listen for the custom 'showToast' event to display the toast notification
+        htmx.on("showToast", (event) => {
+            const toastData = event.detail;
+
+            // Check if toastData contains message and tags
+            if (toastData && toastData.message) {
+                const template = document.getElementById("toast-template").cloneNode(true);
+                template.id = "";  // Remove the ID from the cloned element
+                template.style.display = "block";  // Make the toast visible
+                template.querySelector(".toast-body").textContent = toastData.message;  // Set the message
+                template.classList.add("text-bg-" + toastData.tags);  // Add success, danger, etc., based on tags
+
+                // Append the toast to the container and show it
+                document.getElementById("toast-container").appendChild(template);
+                const toast = new bootstrap.Toast(template, { delay: 3000 });
+                toast.show();
+            } else {
+                console.error("Toast data is undefined or missing 'message' property.");
+            }
+        });
+
+    </script>
+
+
+
+
+    <!-- <script>
         const modal = new bootstrap.Modal(document.getElementById("modal"));
 
         // Show the modal only for specific actions (like Create or Edit)
@@ -41,8 +117,8 @@
             console.log("HTMX Event Details:", e.detail);
 
             // Check if requestConfig and requestConfig.url exist before calling includes()
-            if (e.detail.requestConfig && e.detail.requestConfig.url &&
-                (e.detail.requestConfig.url.includes('create') || e.detail.requestConfig.url.includes('edit'))) {
+            if (e.detail.requestConfig && e.detail.requestConfig.path &&
+                (e.detail.requestConfig.path.includes('create') || e.detail.requestConfig.path.includes('edit'))) {
                 console.log("INSIDE CREATE/EDIT MODAL");
                 modal.show();  // Trigger modal display
             } else {
@@ -64,7 +140,7 @@
         });
 
 
-    </script>
+    </script> -->
 
 </div>
 
