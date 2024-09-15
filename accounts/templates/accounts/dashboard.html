@@ -53,85 +53,61 @@
         </div>
     </div>
 
-
     <script>
-        const modal = new bootstrap.Modal(document.getElementById("modal"));
+        // Assuming you have the Bootstrap Modal JavaScript file included
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalElement = document.getElementById('modal');
+            const modalInstance = new bootstrap.Modal(modalElement);
 
-        // Show the modal after content is swapped into it
-        htmx.on("htmx:afterSwap", (e) => {
-            if (e.detail.target.classList.contains("modal-content")) {
-                modal.show();
-            }
+            // Show the modal after content is swapped into it
+            htmx.on('htmx:afterSwap', function (e) {
+                if (e.detail.target.classList.contains("modal-content")) {
+                    modalInstance.show();
+                }
+            });
+
+            // Hide modal after successful form submission
+            htmx.on('htmx:afterRequest', function (e) {
+                console.log("custom", e.detail.xhr.getResponseHeader('hx-trigger'));
+                if (e.detail.xhr.status === 200) {
+                    try {
+
+                        if (e.detail.xhr.getResponseHeader('hx-trigger')) {
+                            if (e.detail.target.classList.contains('modal-content')) {
+                                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modal'));
+                                modalInstance.hide();
+                                htmx.ajax("GET", "/orders/", "#content", { swap: "outerHTML" });
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+
+                    }
+                }
+            });
+
+            // Listen for the custom 'showToast' event to display the toast notification
+            htmx.on('showToast', function (event) {
+                const toastData = event.detail;
+
+                if (toastData && toastData.message) {
+                    const template = document.getElementById('toast-template').cloneNode(true);
+                    template.id = '';  // Remove the ID from the cloned element
+                    template.style.display = 'block';  // Make the toast visible
+                    template.querySelector('.toast-body').textContent = toastData.message;  // Set the message
+                    template.classList.add('text-bg-' + toastData.tags);  // Add success, danger, etc., based on tags
+
+                    // Append the toast to the container and show it
+                    document.getElementById('toast-container').appendChild(template);
+                    const toast = new bootstrap.Toast(template, { delay: 3000 });
+                    toast.show();
+                } else {
+                    console.error('Toast data is undefined or missing "message" property.');
+                }
+            });
         });
-
-        // Handle success actions after form submission
-        htmx.on("htmx:afterRequest", (e) => {
-            if (e.detail.xhr.status === 200 && e.detail.target.classList.contains("modal-content")) {
-                // modal.hide();
-                $('#modal').modal('hide');
-                htmx.ajax("GET", "/orders/", "#content", { swap: "outerHTML" });
-            }
-        });
-
-        // Listen for the custom 'showToast' event to display the toast notification
-        htmx.on("showToast", (event) => {
-            const toastData = event.detail;
-
-            // Check if toastData contains message and tags
-            if (toastData && toastData.message) {
-                const template = document.getElementById("toast-template").cloneNode(true);
-                template.id = "";  // Remove the ID from the cloned element
-                template.style.display = "block";  // Make the toast visible
-                template.querySelector(".toast-body").textContent = toastData.message;  // Set the message
-                template.classList.add("text-bg-" + toastData.tags);  // Add success, danger, etc., based on tags
-
-                // Append the toast to the container and show it
-                document.getElementById("toast-container").appendChild(template);
-                const toast = new bootstrap.Toast(template, { delay: 3000 });
-                toast.show();
-            } else {
-                console.error("Toast data is undefined or missing 'message' property.");
-            }
-        });
-
     </script>
 
-
-
-
-    <!-- <script>
-        const modal = new bootstrap.Modal(document.getElementById("modal"));
-
-        // Show the modal only for specific actions (like Create or Edit)
-        htmx.on("htmx:afterSwap", (e) => {
-            console.log("After swap event triggered", e.detail.target);
-            console.log("HTMX Event Details:", e.detail);
-
-            // Check if requestConfig and requestConfig.url exist before calling includes()
-            if (e.detail.requestConfig && e.detail.requestConfig.path &&
-                (e.detail.requestConfig.path.includes('create') || e.detail.requestConfig.path.includes('edit'))) {
-                console.log("INSIDE CREATE/EDIT MODAL");
-                modal.show();  // Trigger modal display
-            } else {
-                console.log("OUTSIDE CREATE/EDIT MODAL");
-            }
-        });
-
-
-        // Hide modal after successful form submission
-        htmx.on("htmx:beforeSwap", (e) => {
-            console.log("Before swap event triggered", e.detail.target);
-
-            // Ensure the modal is hidden only if the modal is the target and there is no response (e.g., form successfully submitted)
-            if (document.querySelector('#modal') && !e.detail.xhr.response) {
-                console.log("HIDING MODAL");
-                modal.hide();
-                e.detail.shouldSwap = false;
-            }
-        });
-
-
-    </script> -->
 
 </div>
 

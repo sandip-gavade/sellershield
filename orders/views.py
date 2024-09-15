@@ -18,34 +18,6 @@ def list_orders_view(request):
     return render(request, 'orders/partials/order_table.html', {'page_obj': page_obj})
 
 
-# def create_order_view(request):
-#     if request.method == 'POST':
-#         print('saving order form')
-#         form = OrderForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # Return a JSON response indicating success
-#             return JsonResponse({"message": "Order created successfully"}, status=200)
-#     else:
-#         form = OrderForm()
-
-#     return render(request, 'orders/partials/order_form.html', {'form': form})
-
-
-# def edit_order_view(request, pk):
-#     order = get_object_or_404(Order, pk=pk)
-#     if request.method == 'POST':
-#         form = OrderForm(request.POST, instance=order)
-#         if form.is_valid():
-#             form.save()
-#             # Return a JSON response indicating success
-#             return JsonResponse({"message": "Order updated successfully"}, status=200)
-#     else:
-#         form = OrderForm(instance=order)
-
-#     return render(request, 'orders/partials/order_form.html', {'form': form, 'order': order})
-
-
 def create_order_view(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
