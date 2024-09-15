@@ -15,7 +15,7 @@ def list_orders_view(request):
     page_obj = paginator.get_page(page_number)
 
     # Always render the order table along with the create button
-    return render(request, 'orders/partials/order_table.html', {'page_obj': page_obj})
+    return render(request, 'orders/order_table.html', {'page_obj': page_obj})
 
 
 def create_order_view(request):
@@ -36,12 +36,12 @@ def create_order_view(request):
         else:
             # If the form is invalid, re-render the modal form with errors
             html_form = render_to_string(
-                'orders/partials/order_form.html', {'form': form})
+                'orders/order_form.html', {'form': form})
             return JsonResponse({"html_form": html_form}, status=400)
 
     else:
         form = OrderForm()
-        return render(request, 'orders/partials/order_form.html', {'form': form})
+        return render(request, 'orders/order_form.html', {'form': form})
 
 
 def edit_order_view(request, pk):
@@ -60,4 +60,4 @@ def edit_order_view(request, pk):
             return response
     else:
         form = OrderForm(instance=order)
-    return render(request, 'orders/partials/order_form.html', {'form': form, 'order': order})
+    return render(request, 'orders/order_form.html', {'form': form, 'order': order})

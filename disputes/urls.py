@@ -1,9 +1,8 @@
 from django.urls import path
-
-from . import views
+from .views import list_disputes_view, create_dispute_view, edit_dispute_view
 
 urlpatterns = [
-    path('', views.list_disputes, name='list_disputes'),
-    path('create/', views.create_dispute, name='create_dispute'),
-    path('<int:dispute_id>/edit/', views.edit_dispute, name='edit_dispute'),
+    path('', list_disputes_view, name='list_disputes'),
+    path('create/', create_dispute_view, name='create_dispute'),
+    path('edit/<int:pk>/', edit_dispute_view, name='edit_dispute'),
 ]
