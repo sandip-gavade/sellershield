@@ -67,18 +67,9 @@
         // Handle success actions after form submission
         htmx.on("htmx:afterRequest", (e) => {
             if (e.detail.xhr.status === 200 && e.detail.target.classList.contains("modal-content")) {
-                modal.hide();
-                // Trigger refresh of order list if form submission is successful
-                // Ensure the order list element exists before triggering the refresh
-                // const orderList = document.querySelector("#orderList");
-                // if (orderList) {
-                //     console.log("Triggering orderList refresh");
-                //     htmx.trigger(orderList, "refresh");
-                // } else {
-                //     console.error("#orderList not found in the DOM");
-                // }
-                // Use hx-get to fetch and refresh the order list
-                htmx.ajax("GET", "/orders/", "#orderList", { swap: "innerHTML" });
+                // modal.hide();
+                $('#modal').modal('hide');
+                htmx.ajax("GET", "/orders/", "#content", { swap: "outerHTML" });
             }
         });
 
