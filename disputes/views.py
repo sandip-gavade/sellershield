@@ -1,3 +1,4 @@
+from .models import Return, DisputeCase
 import json
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
@@ -9,31 +10,39 @@ from django.shortcuts import render, get_object_or_404
 
 def list_disputes_view(request):
     disputes = DisputeCase.objects.all().order_by('-case_id')
-    paginator = Paginator(disputes, 10)  # 10 disputes per page
+    paginator = Paginator(disputes, 5)  # 10 disputes per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'disputes/dispute_table.html', {'page_obj': page_obj})
 
 
-def create_dispute_view(request):
+def create_dispute_view(request, return_id):
+    return_obj = get_object_or_404(Return, return_id=return_id)
+
     if request.method == 'POST':
         form = DisputeForm(request.POST)
         if form.is_valid():
-            form.save()
+            dispute_instance = form.save(commit=False)
+            dispute_instance.return_obj = return_obj  # Associate dispute with the return
+            dispute_instance.save()
+
+            # On success, trigger toast and redirect to disputes list
             response = JsonResponse(
                 {"message": "Dispute created successfully"}, status=200)
             response["HX-Trigger"] = json.dumps({
                 "showToast": {"message": "Dispute created successfully", "tags": "success"},
-                "refreshDisputeList": True
             })
             return response
         else:
+            # If the form is invalid, return the form with errors
             html_form = render_to_string(
                 'disputes/dispute_form.html', {'form': form})
             return JsonResponse({"html_form": html_form}, status=400)
+
     else:
         form = DisputeForm()
-        return render(request, 'disputes/dispute_form.html', {'form': form})
+        context = {'form': form, 'return': return_obj}
+        return render(request, 'disputes/dispute_form.html', context)
 
 
 def edit_dispute_view(request, pk):

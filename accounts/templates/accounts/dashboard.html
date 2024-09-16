@@ -76,7 +76,10 @@
                             if (e.detail.target.classList.contains('modal-content')) {
                                 const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modal'));
                                 modalInstance.hide();
-                                htmx.ajax("GET", "/orders/", "#content", { swap: "outerHTML" });
+                                // htmx.ajax("GET", "/orders/", "#content", { swap: "outerHTML" });
+                                // htmx.ajax("GET", "/returns/", "#content", { swap: "outerHTML" });
+                                // After modal is hidden, redirect to disputes list
+                                htmx.ajax("GET", "/disputes/", "#content", { swap: "outerHTML" });
                             }
                         }
                     } catch (error) {

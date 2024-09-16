@@ -5,6 +5,12 @@ from .models import Return
 from .forms import ReturnForm
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from .models import Order, Return
+from .forms import ReturnForm
+import json
 
 
 def list_returns_view(request):
@@ -15,25 +21,54 @@ def list_returns_view(request):
     return render(request, 'returns/return_table.html', {'page_obj': page_obj})
 
 
-def create_return_view(request):
+# def create_return_view(request):
+#     if request.method == 'POST':
+#         form = ReturnForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             response = JsonResponse(
+#                 {"message": "Return created successfully"}, status=200)
+#             response["HX-Trigger"] = json.dumps({
+#                 "showToast": {"message": "Return created successfully", "tags": "success"},
+#                 "refreshReturnList": True
+#             })
+#             return response
+#         else:
+#             html_form = render_to_string(
+#                 'returns/return_form.html', {'form': form})
+#             return JsonResponse({"html_form": html_form}, status=400)
+#     else:
+#         form = ReturnForm()
+#         return render(request, 'returns/return_form.html', {'form': form})
+
+
+def create_return_view(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
     if request.method == 'POST':
         form = ReturnForm(request.POST)
         if form.is_valid():
-            form.save()
+            return_instance = form.save(commit=False)
+            return_instance.order = order  # Associate the return with the order
+            return_instance.save()
+
+            # On success, trigger toast and redirect to returns list
             response = JsonResponse(
                 {"message": "Return created successfully"}, status=200)
             response["HX-Trigger"] = json.dumps({
                 "showToast": {"message": "Return created successfully", "tags": "success"},
-                "refreshReturnList": True
             })
             return response
         else:
+            # If the form is invalid, return the form with errors
             html_form = render_to_string(
                 'returns/return_form.html', {'form': form})
             return JsonResponse({"html_form": html_form}, status=400)
+
     else:
         form = ReturnForm()
-        return render(request, 'returns/return_form.html', {'form': form})
+        context = {'form': form, 'order': order}
+        return render(request, 'returns/return_form.html', context)
 
 
 def edit_return_view(request, pk):

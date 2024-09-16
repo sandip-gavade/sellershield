@@ -31,7 +31,8 @@
                     <td>
                         <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_order' order.pk %}"
                             hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Edit</button>
-                        <a href="#" class="btn btn-warning btn-sm">Return</a>
+                        <button class="btn btn-warning btn-sm" hx-get="{% url 'create_return' order.order_id %}"
+                            hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Return</button>
                     </td>
                 </tr>
                 {% endfor %}
