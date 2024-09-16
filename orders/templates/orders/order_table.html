@@ -35,6 +35,10 @@
                             hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Return</button>
                     </td>
                 </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No orders found.</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

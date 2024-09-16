@@ -1,5 +1,6 @@
-<form hx-post="{% if dispute %}{% url 'edit_dispute' dispute.case_id %}{% endif %}" hx-target="this"
-    class="modal-content">
+<form
+    hx-post="{% if dispute %}{% url 'edit_dispute' dispute.case_id %}{% else %}{% url 'create_dispute' return.return_id  %}{% endif %}"
+    hx-target="this" class="modal-content">
     {% csrf_token %}
     <div class="modal-header">
         <h5 class="modal-title">{{ dispute|default:"Create New" }} Dispute</h5>
