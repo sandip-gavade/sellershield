@@ -57,6 +57,7 @@ def create_return_view(request, order_id):
                 {"message": "Return created successfully"}, status=200)
             response["HX-Trigger"] = json.dumps({
                 "showToast": {"message": "Return created successfully", "tags": "success"},
+                "refreshReturnList": True
             })
             return response
         else:

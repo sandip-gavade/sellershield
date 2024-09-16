@@ -31,6 +31,7 @@ def create_dispute_view(request, return_id):
                 {"message": "Dispute created successfully"}, status=200)
             response["HX-Trigger"] = json.dumps({
                 "showToast": {"message": "Dispute created successfully", "tags": "success"},
+                "refreshDisputeList": True
             })
             return response
         else:
