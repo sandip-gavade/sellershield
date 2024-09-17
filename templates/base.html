@@ -24,7 +24,8 @@
 
     <!-- Include HTMX -->
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-    {% block extra_head %}{% endblock %}
+</head>
+{% block extra_head %}{% endblock %}
 </head>
 
 <body>
@@ -68,6 +69,8 @@
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <!-- <script src="{% static 'js/htmx.min.js' %}"></script> -->
     <script src="{% static 'js/scripts.js' %}"></script>
+
+    </script>
     {% block extra_js %}{% endblock %}
 
 </body>
