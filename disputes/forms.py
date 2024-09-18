@@ -11,6 +11,17 @@ class DisputeForm(forms.ModelForm):
             'financial_impact', 'resolution_notes', 'notification_sent'
         ]
 
+        # Customizing labels for form fields
+        labels = {
+            'return_obj': 'Associated Return',
+            'agent': 'Assigned Agent',
+            'reason_for_dispute': 'Dispute Reason',
+            'status': 'Dispute Status',
+            'financial_impact': 'Financial Impact',
+            'resolution_notes': 'Resolution Notes',
+            'notification_sent': 'Notification Sent to Seller',
+        }
+
         # Adding widgets to customize the form fields
         widgets = {
             # Read-only

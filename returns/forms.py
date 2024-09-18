@@ -9,6 +9,18 @@ class ReturnForm(forms.ModelForm):
         fields = ['return_id', 'order', 'agent', 'return_reason', 'return_tracking_number',
                   'return_date', 'flagged_as_suspicious', 'validation_status']
 
+        # Customizing labels for form fields
+        labels = {
+            'return_id': 'Return Reference Number',
+            'order': 'Associated Order',
+            'agent': 'Customer Agent',
+            'return_reason': 'Reason for Return',
+            'return_tracking_number': 'Tracking Number',
+            'return_date': 'Date of Return',
+            'flagged_as_suspicious': 'Flag as Suspicious',
+            'validation_status': 'Validation Status',
+        }
+
         # Adding widgets to customize the form fields
         widgets = {
             'return_id': TextInput(attrs={'class': 'form-control'}),

@@ -9,6 +9,14 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['id', 'order_id', 'item', 'customer_name',
                   'customer_email', 'order_total', 'status']
+        
+        # Customizing labels for form fields
+        labels = {
+            'order_id': 'Order Reference Number',
+            'item': 'Product Name',
+            'order_total': 'Total Amount',
+            'status': 'Order Status',
+        }
 
         # Adding widgets to customize the form fields
         widgets = {

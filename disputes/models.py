@@ -16,7 +16,6 @@ class DisputeCase(models.Model):
     case_id = models.AutoField(primary_key=True)
     return_obj = models.ForeignKey(
         'returns.Return', related_name='disputes', on_delete=models.CASCADE)
-    # Make sure the agent field is defined
     agent = models.ForeignKey(
         User, related_name='disputes', on_delete=models.CASCADE, default=1)
     reason_for_dispute = models.TextField()
