@@ -6,8 +6,9 @@ from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 from .models import Order
 from .forms import OrderForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def list_orders_view(request):
     orders = Order.objects.all().order_by('-order_date')
     paginator = Paginator(orders, 10)  # 10 orders per page
@@ -17,7 +18,7 @@ def list_orders_view(request):
     # Always render the order table along with the create button
     return render(request, 'orders/order_table.html', {'page_obj': page_obj})
 
-
+@login_required
 def create_order_view(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -43,7 +44,7 @@ def create_order_view(request):
         form = OrderForm()
         return render(request, 'orders/order_form.html', {'form': form})
 
-
+@login_required
 def edit_order_view(request, pk):
     order = get_object_or_404(Order, pk=pk)
     if request.method == 'POST':

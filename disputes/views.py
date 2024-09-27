@@ -6,8 +6,9 @@ from .models import DisputeCase
 from .forms import DisputeForm
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def list_disputes_view(request):
     disputes = DisputeCase.objects.all().order_by('-case_id')
     paginator = Paginator(disputes, 5)  # 10 disputes per page
@@ -15,7 +16,7 @@ def list_disputes_view(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'disputes/dispute_table.html', {'page_obj': page_obj})
 
-
+@login_required
 def create_dispute_view(request, return_id):
     return_obj = get_object_or_404(Return, return_id=return_id)
 
@@ -46,6 +47,7 @@ def create_dispute_view(request, return_id):
         return render(request, 'disputes/dispute_form.html', context)
 
 
+@login_required
 def edit_dispute_view(request, pk):
     dispute = get_object_or_404(DisputeCase, pk=pk)
     if request.method == 'POST':

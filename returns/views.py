@@ -11,8 +11,9 @@ from django.template.loader import render_to_string
 from .models import Order, Return
 from .forms import ReturnForm
 import json
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def list_returns_view(request):
     returns = Return.objects.all().order_by('-return_date')
     paginator = Paginator(returns, 5)  # 10 returns per page
@@ -41,7 +42,7 @@ def list_returns_view(request):
 #         form = ReturnForm()
 #         return render(request, 'returns/return_form.html', {'form': form})
 
-
+@login_required
 def create_return_view(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
 
@@ -71,7 +72,7 @@ def create_return_view(request, order_id):
         context = {'form': form, 'order': order}
         return render(request, 'returns/return_form.html', context)
 
-
+@login_required
 def edit_return_view(request, pk):
     return_instance = get_object_or_404(Return, pk=pk)
     if request.method == 'POST':
