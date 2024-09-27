@@ -8,7 +8,9 @@
                 <th>Reason</th>
                 <th>Financial Impact</th>
                 <th>Status</th>
+                {% if request.user.groups.all.0.name != "Seller" %}
                 <th>Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -19,10 +21,12 @@
                 <td>{{ dispute.reason_for_dispute }}</td>
                 <td>{{ dispute.financial_impact }}</td>
                 <td>{{ dispute.status }}</td>
+                {% if request.user.groups.all.0.name != "Seller" %}
                 <td>
                     <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_dispute' dispute.case_id %}"
                         hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Edit</button>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>

@@ -14,6 +14,7 @@ def list_orders_view(request):
     paginator = Paginator(orders, 10)  # 10 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
 
     # Always render the order table along with the create button
     return render(request, 'orders/order_table.html', {'page_obj': page_obj})

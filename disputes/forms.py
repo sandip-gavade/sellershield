@@ -25,8 +25,8 @@ class DisputeForm(forms.ModelForm):
         # Adding widgets to customize the form fields
         widgets = {
             # Read-only
-            'return_obj': Select(attrs={'class': 'form-control'}),
-            'agent': Select(attrs={'class': 'form-control'}),
+            'return_obj': Select(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'agent': Select(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             # Text area for detailed input
             'reason_for_dispute': Textarea(attrs={'class': 'form-control', 'rows': 3}),
             # Dropdown for status selection
@@ -38,3 +38,14 @@ class DisputeForm(forms.ModelForm):
             # Checkbox for notifications
             'notification_sent': CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+    def __init__(self, *args, **kwargs):
+        # Accept default return_obj and agent as parameters
+        default_return_obj = kwargs.pop('default_return_obj', None)
+        default_agent = kwargs.pop('default_agent', None)
+        super(DisputeForm, self).__init__(*args, **kwargs)
+
+        # Set default values for return_obj and agent if provided
+        if default_return_obj:
+            self.fields['return_obj'].initial = default_return_obj
+        if default_agent:
+            self.fields['agent'].initial = default_agent

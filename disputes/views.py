@@ -19,6 +19,7 @@ def list_disputes_view(request):
 @login_required
 def create_dispute_view(request, return_id):
     return_obj = get_object_or_404(Return, return_id=return_id)
+    default_agent = request.user # Use the logged-in user as the default agent
 
     if request.method == 'POST':
         form = DisputeForm(request.POST)
@@ -42,7 +43,8 @@ def create_dispute_view(request, return_id):
             return JsonResponse({"html_form": html_form}, status=400)
 
     else:
-        form = DisputeForm()
+        # form = DisputeForm()
+        form = DisputeForm(default_return_obj=return_obj, default_agent=default_agent)
         context = {'form': form, 'return': return_obj}
         return render(request, 'disputes/dispute_form.html', context)
 

@@ -68,8 +68,9 @@ def create_return_view(request, order_id):
             return JsonResponse({"html_form": html_form}, status=400)
 
     else:
-        form = ReturnForm()
-        context = {'form': form, 'order': order}
+        # form = ReturnForm()
+        form = ReturnForm(default_order=order)
+        context = {'form': form, 'order': order }
         return render(request, 'returns/return_form.html', context)
 
 @login_required

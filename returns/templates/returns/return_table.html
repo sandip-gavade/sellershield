@@ -10,7 +10,9 @@
                 <th>Reason</th>
                 <th>Tracking Number</th>
                 <th>Status</th>
+                {% if request.user.groups.all.0.name != "Customer Agent" %}
                 <th>Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -21,15 +23,15 @@
                 <td>{{ return.get_return_reason_display }}</td>
                 <td>{{ return.return_tracking_number }}</td>
                 <td>{{ return.validation_status }}</td>
+                {% if request.user.groups.all.0.name != "Customer Agent" %}
                 <td>
                     <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_return' return.pk %}"
                         hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Edit</button>
 
                     <button class="btn btn-warning btn-sm" hx-get="{% url 'create_dispute' return.return_id %}"
                         hx-target="#modal .modal-content" hx-trigger="click" hx-swap="outerHTML">Dispute</button>
-
-
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>

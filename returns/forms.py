@@ -24,7 +24,7 @@ class ReturnForm(forms.ModelForm):
         # Adding widgets to customize the form fields
         widgets = {
             'return_id': TextInput(attrs={'class': 'form-control'}),
-            'order': Select(attrs={'class': 'form-control'}),
+            'order': Select(attrs={'class': 'form-control ', 'readonly': 'readonly' }),
             'agent': Select(attrs={'class': 'form-control'}),
             'return_reason': Select(attrs={'class': 'form-control'}),
             'return_tracking_number': TextInput(attrs={'class': 'form-control'}),
@@ -33,3 +33,13 @@ class ReturnForm(forms.ModelForm):
             'flagged_as_suspicious': CheckboxInput(attrs={'class': 'form-check-input'}),
             'validation_status': Select(attrs={'class': 'form-control'}),
         }
+
+
+    def __init__(self, *args, **kwargs):
+        # Accept the default order as a parameter
+        default_order = kwargs.pop('default_order', None)
+        super(ReturnForm, self).__init__(*args, **kwargs)
+        
+        if default_order:
+            # Set the initial value for the 'order' field to the default order
+            self.fields['order'].initial = default_order
